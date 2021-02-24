@@ -48,6 +48,8 @@ function mousePressed() {
 			tryAgain = false;
 			timedOut = false;
 			score = 0;
+			x = random(0, windowWidth - bertie.width);
+			y = random(0, windowHeight - bertie.height);
 		}
 	}
 
