@@ -6,7 +6,10 @@ let x, y;
 let score = 0;
 let victory = false;
 let victorySound;
+let atmoSound;
 let victorySoundPlayed = false;
+let atmoSoundPlayed = false;
+let atmoSoundPaused = false;
 let tryAgain = false;
 let timedOut = false;
 
@@ -19,8 +22,9 @@ function preload() {
 	bertie = loadImage("assets/bertie.png");
 	congratulations = loadImage("assets/congratulations.png");
 
-	soundFormats("wav");
-	victorySound = loadSound("assets/victory");
+	soundFormats("wav", "mp3");
+	victorySound = loadSound("assets/victory.wav");
+	atmoSound = loadSound("assets/atmo.mp3");
 }
 
 function setup() {
@@ -45,11 +49,14 @@ function mousePressed() {
 			playing = true;
 			victory = false;
 			victorySoundPlayed = false;
+			atmoSoundPlayed = false;
+			atmoSoundPaused = false;
 			tryAgain = false;
 			timedOut = false;
 			score = 0;
 			x = random(0, windowWidth - bertie.width);
 			y = random(0, windowHeight - bertie.height);
+			atmoSound.pause();
 		}
 	}
 
@@ -74,6 +81,9 @@ function draw() {
 		if (!victory) {
 			background(0);
 
+			if (!atmoSoundPlayed) atmoSound.loop();
+			atmoSoundPlayed = true;
+
 			ellipse(mouseX, mouseY, 150, 150);
 
 			image(bertie, x, y);
@@ -97,6 +107,9 @@ function draw() {
 				imageMode(CENTER);
 				image(congratulations, windowWidth / 2, windowHeight / 2);
 
+				if (!atmoSoundPaused) atmoSound.pause();
+				atmoSoundPaused = true;
+
 				if (!victorySoundPlayed) victorySound.play();
 				victorySoundPlayed = true;
 
@@ -108,6 +121,9 @@ function draw() {
 				timedOut = true;
 			} else {
 				background(256);
+
+				if (atmoSoundPlayed) atmoSound.loop();
+				atmoSoundPlayed = false;
 
 				textFont(font);
 				textAlign(CENTER, CENTER);
